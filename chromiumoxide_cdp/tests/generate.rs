@@ -1,3 +1,5 @@
+mod common;
+
 use chromiumoxide_cdp::CURRENT_REVISION;
 use chromiumoxide_pdl::build::Generator;
 use std::env;
@@ -105,6 +107,13 @@ async fn pdl_is_fresh() {
                 .await
                 .unwrap();
         assert!(include_proto_new.contains("The Chromium Authors"));
+
+        let include_proto_new = if include == "domains/Network.pdl" {
+            common::apply_network_compatibility_overlay(&include_proto_new)
+                .expect("review fork compatibility overlay")
+        } else {
+            include_proto_new
+        };
 
         if include_proto_new != include_proto_old {
             if let Some(parent) = include_path.parent() {

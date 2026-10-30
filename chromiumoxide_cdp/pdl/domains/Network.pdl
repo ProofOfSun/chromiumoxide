@@ -1827,7 +1827,11 @@ domain Network
     properties
       boolean initiatorIsSecureContext
       IPAddressSpace initiatorIPAddressSpace
-      PrivateNetworkRequestPolicy privateNetworkRequestPolicy
+      # Legacy policy, absent in newer Chromium. Do not infer a policy when absent.
+      optional PrivateNetworkRequestPolicy privateNetworkRequestPolicy
+      # New policy, kept separately and verbatim for forward-compatible event decoding.
+      # This value is not interchangeable with privateNetworkRequestPolicy.
+      optional string localNetworkAccessRequestPolicy
 
   # Fired when additional information about a requestWillBeSent event is available from the
   # network stack. Not every requestWillBeSent event will have an additional
